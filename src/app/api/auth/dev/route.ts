@@ -13,13 +13,16 @@ export async function GET() {
     return NextResponse.json({ error: "disabled" }, { status: 404 });
 
   let user = await prisma.user.findUnique({ where: { googleSub: "dev-demo" } });
-  if (!user) {
-    const tenant = await prisma.tenant.create({
-      data: { name: "Sanu's Business", industry: "Real Estate", onboarded: true },
-    });
-    user = await prisma.user.create({
-      data: { tenantId: tenant.id, email: "sanu@demo.dev", name: "Sanu", googleSub: "dev-demo", role: "OWNER" },
-    });
+if (!user) {
+  const tenant = await prisma.tenant.upsert({
+    where: { id: "demo-tenant" },
+    update: {},
+    create: { id: "demo-tenant", name: "Sanu's Business", industry: "Real Estate", onboarded: true },
+  });
+  user = await prisma.user.create({
+    data: { tenantId: tenant.id, email: "sanu@demo.dev", name: "Sanu", googleSub: "dev-demo", role: "OWNER" },
+  });
+
   }
   const access = await signAccess({ sub: user.id, tid: user.tenantId, role: user.role });
   const { raw } = await issueRefresh(user.id);
