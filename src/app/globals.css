@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+body { background: #09090B; color: #E7E7EA; -webkit-font-smoothing: antialiased; }
+.kpi { font-family: var(--font-mono), monospace; font-variant-numeric: tabular-nums; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: #26262b; border-radius: 8px; }
